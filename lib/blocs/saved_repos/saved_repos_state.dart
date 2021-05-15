@@ -10,7 +10,7 @@ class SavedReposState extends Equatable {
       this.results = const [],
       this.currentResults = const [],
       SavedRepo? repoToCreate,
-      int? repoId})
+      String? repoId})
       : this.repoToCreate = repoToCreate,
         this.repoId = repoId;
   final SavedReposStateType stateType;
@@ -20,7 +20,7 @@ class SavedReposState extends Equatable {
   final List<SavedRepo> results;
   final List<SavedRepo> currentResults;
   final SavedRepo? repoToCreate;
-  final int? repoId;
+  final String? repoId;
 
   factory SavedReposState.initial() =>
       SavedReposState(stateType: SavedReposStateType.initial);
@@ -33,7 +33,7 @@ class SavedReposState extends Equatable {
       List<SavedRepo>? results,
       List<SavedRepo>? currentResults,
       SavedRepo? repoToCreate,
-      int? repoId}) {
+      String? repoId}) {
     return SavedReposState(
         stateType: stateType ?? this.stateType,
         errorMsg: errorMsg ?? this.errorMsg,
@@ -62,7 +62,8 @@ enum SavedReposStateType {
   loading,
   display_saved_repos,
   error,
-  no_saved_repos
+  no_saved_repos,
+  pull_to_refresh
 }
 
 enum SavedReposErrorCode {

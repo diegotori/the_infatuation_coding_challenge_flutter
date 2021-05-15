@@ -3,12 +3,22 @@ part of 'saved_repos_bloc.dart';
 class SavedReposEvent extends Equatable {
   final SavedReposEventType eventType;
   final GithubRepo? repoToCreate;
-  final int? repoId;
+  final bool? forceRefresh;
+  final bool? pullToRefresh;
+  final String? repoId;
   const SavedReposEvent._(
-      {required this.eventType, this.repoToCreate, this.repoId});
+      {required this.eventType,
+      this.repoToCreate,
+      this.repoId,
+      this.forceRefresh,
+      this.pullToRefresh});
 
-  factory SavedReposEvent.fetchSavedRepos() {
-    return SavedReposEvent._(eventType: SavedReposEventType.fetch_saved_repos);
+  factory SavedReposEvent.fetchSavedRepos(
+      {bool? forceRefresh, bool? pullToRefresh}) {
+    return SavedReposEvent._(
+        eventType: SavedReposEventType.fetch_saved_repos,
+        forceRefresh: forceRefresh,
+        pullToRefresh: pullToRefresh);
   }
 
   factory SavedReposEvent.createRepo(GithubRepo repoToCreate) {
@@ -16,7 +26,7 @@ class SavedReposEvent extends Equatable {
         eventType: SavedReposEventType.create_repo, repoToCreate: repoToCreate);
   }
 
-  factory SavedReposEvent.deleteRepo(int repoId) {
+  factory SavedReposEvent.deleteRepo(String repoId) {
     return SavedReposEvent._(
         eventType: SavedReposEventType.delete_repo, repoId: repoId);
   }
@@ -31,7 +41,8 @@ class SavedReposEvent extends Equatable {
   }
 
   @override
-  List<Object?> get props => [eventType, repoToCreate, repoId];
+  List<Object?> get props =>
+      [eventType, repoToCreate, forceRefresh, pullToRefresh, repoId];
 }
 
 enum SavedReposEventType {
