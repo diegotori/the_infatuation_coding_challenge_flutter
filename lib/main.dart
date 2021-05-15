@@ -1,16 +1,57 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:device_info/device_info.dart';
+import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:the_infatuation_coding_challenge_flutter/api_service/github/github_client.dart';
 import 'package:the_infatuation_coding_challenge_flutter/api_service/reposerver_api_service.dart';
 import 'package:the_infatuation_coding_challenge_flutter/blocs/saved_repos/saved_repos_bloc.dart';
+import 'package:the_infatuation_coding_challenge_flutter/widgets/saved_repos_view.dart';
+import 'package:the_infatuation_coding_challenge_flutter/widgets/search_repos_autocomplete.dart';
 
-void main() {
-  runApp(MyApp());
+bool get isInDebugMode {
+  bool inDebugMode = false;
+  assert(inDebugMode = true);
+  return inDebugMode;
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Fimber.plantTree(DebugTree(printTimeType: DebugTree.timeClockType));
+  FlutterError.onError = (FlutterErrorDetails details) {
+    if (isInDebugMode) {
+      FlutterError.dumpErrorToConsole(details, forceReport: true);
+    } else {
+      // In production mode report to the application zone to report to
+      // Sentry.
+      Zone.current.handleUncaughtError(details.exception, details.stack!);
+    }
+  };
+
+  bool isAndroidSim = false;
+  if (Platform.isAndroid) {
+    // We check if we're running on Android simulator so that we can change
+    // out the localhost value to 10.0.2.2 which is specific to
+    // the android sim.
+    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    final deviceData = await deviceInfoPlugin.androidInfo;
+    isAndroidSim = !deviceData.isPhysicalDevice;
+  }
+  runApp(MyApp(
+    isAndroidSim: isAndroidSim,
+  ));
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  const MyApp({Key? key, required this.isAndroidSim}) : super(key: key);
+
+  final bool isAndroidSim;
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -19,7 +60,7 @@ class MyApp extends StatelessWidget {
           create: (context) => GithubClient(),
         ),
         Provider<RepoServerApiService>(
-          create: (context) => RepoServerApiService(),
+          create: (context) => RepoServerApiService(isAndroidSim: isAndroidSim),
         ),
         BlocProvider<SavedReposBloc>(create: (context) {
           final repoServerApiService = context.read<RepoServerApiService>();
@@ -50,15 +91,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -66,68 +98,38 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Expanded(child: SearchReposAutoComplete()),
+                SizedBox(
+                  width: 8,
+                ),
+                BlocBuilder<SavedReposBloc, SavedReposState>(
+                  builder: (context, state) => PlatformSwitch(
+                      value: state.sortByStars,
+                      onChanged: (_) {
+                        context
+                            .read<SavedReposBloc>()
+                            .add(SavedReposEvent.toggleSortByStars());
+                      }),
+                )
+              ],
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+          ),
+          Expanded(child: SavedReposView())
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
