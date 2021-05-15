@@ -22,9 +22,9 @@ class GithubRepo extends Equatable {
     return GithubRepo(
         id: json['id'] as int,
         fullName: json['full_name'] as String,
-        desc: json['description'] as String,
+        desc: json['description'] != null ? json['description'] as String : "",
         stargazersCount: json['stargazers_count'] as int,
-        language: json['language'] as String,
+        language: json['language'] != null ? json['language'] as String : "",
         url: json['html_url'] as String,
         createdAt: json['created_at'] as String);
   }
