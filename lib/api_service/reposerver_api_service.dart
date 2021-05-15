@@ -8,9 +8,11 @@ class RepoServerApiService {
   final http.Client _httpClient;
   final String _baseUrl;
 
-  RepoServerApiService({http.Client? httpClient, String? baseUrl})
+  RepoServerApiService(
+      {http.Client? httpClient, String? baseUrl, bool isAndroidSim = false})
       : this._httpClient = httpClient ?? http.Client(),
-        this._baseUrl = baseUrl ?? "http://localhost:8080/repo/";
+        this._baseUrl = baseUrl ??
+            "http://${isAndroidSim ? "10.0.2.2" : "localhost"}:8080/repo/";
 
   Future<List<SavedRepo>> get savedRepos async {
     List<SavedRepo> result = [];
@@ -18,7 +20,7 @@ class RepoServerApiService {
     final decoded = jsonDecode(resp.body);
     final statusCode = resp.statusCode;
     if (statusCode == 200) {
-      result = (decoded as List)
+      result = (decoded['repos'] as List)
           .map<SavedRepo>((e) => SavedRepo.fromJsonMap(e)!)
           .toList();
     } else {
@@ -29,8 +31,8 @@ class RepoServerApiService {
   }
 
   Future<SavedRepo> createRepo(SavedRepo repoToSave) async {
-    final resp =
-        await _httpClient.post(Uri.parse(_baseUrl), body: repoToSave.toJson());
+    final jsonBody = repoToSave.toJson();
+    final resp = await _httpClient.post(Uri.parse(_baseUrl), body: jsonBody);
     final decoded = jsonDecode(resp.body);
     final statusCode = resp.statusCode;
     if (statusCode == 200) {
@@ -42,14 +44,13 @@ class RepoServerApiService {
     }
   }
 
-  Future<String> deleteRepo(int repoId) async {
-    final resp = await _httpClient.delete(Uri.parse("$_baseUrl$repoId/"));
-    final decoded = jsonDecode(resp.body);
+  Future<String> deleteRepo(String repoId) async {
+    final resp = await _httpClient.delete(Uri.parse("$_baseUrl$repoId"));
     final statusCode = resp.statusCode;
-    if (statusCode != 200 || statusCode != 204) {
+    if (statusCode != 200) {
       throw RepoServerApiException(
           statusCode, "Failed to delete repo ID $repoId.",
-          rawMessage: decoded);
+          rawMessage: resp.body);
     }
     return "";
   }
