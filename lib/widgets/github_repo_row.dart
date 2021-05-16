@@ -26,13 +26,10 @@ class GithubRepoRow extends StatelessWidget {
           if (desc != null) ...[
             Text(desc!),
             SizedBox(
-              height: 4,
+              height: 2,
             ),
           ],
           Text(language),
-          SizedBox(
-            height: 4,
-          ),
           Text("Stars: $stargazersCount"),
         ],
       ),
