@@ -101,7 +101,8 @@ class SavedReposBloc extends Bloc<SavedReposEvent, SavedReposState> {
     } else {
       stateToYield = state.update(
           stateType: SavedReposStateType.loading,
-          errorCode: SavedReposErrorCode.none);
+          errorCode: SavedReposErrorCode.none,
+          errorMsg: "");
     }
     yield stateToYield;
     try {
