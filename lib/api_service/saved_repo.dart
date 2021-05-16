@@ -48,6 +48,24 @@ abstract class SavedRepo implements Built<SavedRepo, SavedRepoBuilder> {
   static Serializer<SavedRepo> get serializer => _$savedRepoSerializer;
 }
 
+abstract class SavedRepoBuilder
+    implements Builder<SavedRepo, SavedRepoBuilder> {
+  String? id;
+
+  String? fullName;
+
+  String? createdAt;
+
+  int stargazersCount = 0;
+
+  String? language;
+
+  String? url;
+
+  factory SavedRepoBuilder() = _$SavedRepoBuilder;
+  SavedRepoBuilder._();
+}
+
 extension SavedRepoExtension on SavedRepo {
   DateTime get createdAtDate => DateTime.parse(createdAt);
 }

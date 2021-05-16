@@ -96,7 +96,7 @@ class _$SavedRepo extends SavedRepo {
   final String url;
 
   factory _$SavedRepo([void Function(SavedRepoBuilder)? updates]) =>
-      (new SavedRepoBuilder()..update(updates)).build();
+      (new SavedRepoBuilder()..update(updates)).build() as _$SavedRepo;
 
   _$SavedRepo._(
       {required this.id,
@@ -120,7 +120,7 @@ class _$SavedRepo extends SavedRepo {
       (toBuilder()..update(updates)).build();
 
   @override
-  SavedRepoBuilder toBuilder() => new SavedRepoBuilder()..replace(this);
+  _$SavedRepoBuilder toBuilder() => new _$SavedRepoBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -159,45 +159,92 @@ class _$SavedRepo extends SavedRepo {
   }
 }
 
-class SavedRepoBuilder implements Builder<SavedRepo, SavedRepoBuilder> {
+class _$SavedRepoBuilder extends SavedRepoBuilder {
   _$SavedRepo? _$v;
 
-  String? _id;
-  String? get id => _$this._id;
-  set id(String? id) => _$this._id = id;
+  @override
+  String? get id {
+    _$this;
+    return super.id;
+  }
 
-  String? _fullName;
-  String? get fullName => _$this._fullName;
-  set fullName(String? fullName) => _$this._fullName = fullName;
+  @override
+  set id(String? id) {
+    _$this;
+    super.id = id;
+  }
 
-  String? _createdAt;
-  String? get createdAt => _$this._createdAt;
-  set createdAt(String? createdAt) => _$this._createdAt = createdAt;
+  @override
+  String? get fullName {
+    _$this;
+    return super.fullName;
+  }
 
-  int? _stargazersCount;
-  int? get stargazersCount => _$this._stargazersCount;
-  set stargazersCount(int? stargazersCount) =>
-      _$this._stargazersCount = stargazersCount;
+  @override
+  set fullName(String? fullName) {
+    _$this;
+    super.fullName = fullName;
+  }
 
-  String? _language;
-  String? get language => _$this._language;
-  set language(String? language) => _$this._language = language;
+  @override
+  String? get createdAt {
+    _$this;
+    return super.createdAt;
+  }
 
-  String? _url;
-  String? get url => _$this._url;
-  set url(String? url) => _$this._url = url;
+  @override
+  set createdAt(String? createdAt) {
+    _$this;
+    super.createdAt = createdAt;
+  }
 
-  SavedRepoBuilder();
+  @override
+  int get stargazersCount {
+    _$this;
+    return super.stargazersCount;
+  }
+
+  @override
+  set stargazersCount(int stargazersCount) {
+    _$this;
+    super.stargazersCount = stargazersCount;
+  }
+
+  @override
+  String? get language {
+    _$this;
+    return super.language;
+  }
+
+  @override
+  set language(String? language) {
+    _$this;
+    super.language = language;
+  }
+
+  @override
+  String? get url {
+    _$this;
+    return super.url;
+  }
+
+  @override
+  set url(String? url) {
+    _$this;
+    super.url = url;
+  }
+
+  _$SavedRepoBuilder() : super._();
 
   SavedRepoBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
-      _id = $v.id;
-      _fullName = $v.fullName;
-      _createdAt = $v.createdAt;
-      _stargazersCount = $v.stargazersCount;
-      _language = $v.language;
-      _url = $v.url;
+      super.id = $v.id;
+      super.fullName = $v.fullName;
+      super.createdAt = $v.createdAt;
+      super.stargazersCount = $v.stargazersCount;
+      super.language = $v.language;
+      super.url = $v.url;
       _$v = null;
     }
     return this;
