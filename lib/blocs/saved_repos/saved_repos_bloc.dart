@@ -89,41 +89,42 @@ class SavedReposBloc extends Bloc<SavedReposEvent, SavedReposState> {
       _logger.i("Force-refreshing our Player's Saved Repos.");
     }
 
-    var currentState = state;
+    SavedReposState stateToYield;
     final bool wasDisplayingSavedRepos =
-        currentState.stateType == SavedReposStateType.display_saved_repos;
+        state.stateType == SavedReposStateType.display_saved_repos;
     SavedReposStateType? previousStateType;
     if (pullToRefresh && wasDisplayingSavedRepos) {
-      previousStateType = currentState.stateType;
-      currentState = currentState.update(
+      previousStateType = state.stateType;
+      stateToYield = state.update(
           stateType: SavedReposStateType.pull_to_refresh,
           errorCode: SavedReposErrorCode.none);
     } else {
-      currentState = currentState.update(
+      stateToYield = state.update(
           stateType: SavedReposStateType.loading,
           errorCode: SavedReposErrorCode.none);
     }
-    yield currentState;
+    yield stateToYield;
     try {
       final savedRepos = await _repoServerApiService.savedRepos;
       if (savedRepos.isEmpty) {
-        yield currentState.update(
-            stateType: SavedReposStateType.no_saved_repos);
+        yield state.update(
+            stateType: SavedReposStateType.no_saved_repos, errorMsg: "");
       } else {
-        var sortedRepos = savedRepos;
-        if (currentState.sortByStars) {
+        var sortedRepos = [...savedRepos];
+        if (state.sortByStars) {
           sortedRepos.sortByStars();
         }
-        yield currentState.update(
+        yield state.update(
             stateType: SavedReposStateType.display_saved_repos,
+            errorMsg: "",
             results: savedRepos,
             currentResults: sortedRepos);
       }
     } catch (e) {
       if (pullToRefresh && wasDisplayingSavedRepos) {
-        yield currentState.update(stateType: previousStateType);
+        yield state.update(stateType: previousStateType);
       } else {
-        yield currentState.update(
+        yield state.update(
             stateType: SavedReposStateType.error,
             errorMsg: e.toString(),
             errorCode: SavedReposErrorCode.fetch_repo_error);
@@ -135,12 +136,10 @@ class SavedReposBloc extends Bloc<SavedReposEvent, SavedReposState> {
     if (state.stateType == SavedReposStateType.loading) {
       return;
     }
-    var currentState = state;
-    currentState = currentState.update(
+    yield state.update(
         stateType: SavedReposStateType.loading,
         errorMsg: "",
         errorCode: SavedReposErrorCode.none);
-    yield currentState;
     final savedRepo = SavedRepo((b) => b
       ..id = "${repo.id}"
       ..fullName = repo.fullName
@@ -150,17 +149,17 @@ class SavedReposBloc extends Bloc<SavedReposEvent, SavedReposState> {
       ..url = repo.url);
     try {
       await _repoServerApiService.createRepo(savedRepo);
-      var updatedResults = [...currentState.results, savedRepo];
-      var sortedResults = updatedResults;
-      if (currentState.sortByStars) {
+      var updatedResults = [...state.results, savedRepo];
+      var sortedResults = [...updatedResults];
+      if (state.sortByStars) {
         sortedResults.sortByStars();
       }
-      yield currentState.update(
+      yield state.update(
           stateType: SavedReposStateType.display_saved_repos,
           results: updatedResults,
           currentResults: sortedResults);
     } catch (e) {
-      yield currentState.update(
+      yield state.update(
           stateType: SavedReposStateType.display_saved_repos,
           errorMsg: e.toString(),
           errorCode: SavedReposErrorCode.create_repo_error,
@@ -172,26 +171,24 @@ class SavedReposBloc extends Bloc<SavedReposEvent, SavedReposState> {
     if (state.stateType == SavedReposStateType.loading) {
       return;
     }
-    var currentState = state;
-    currentState = currentState.update(
+    yield state.update(
         stateType: SavedReposStateType.loading,
         errorMsg: "",
         errorCode: SavedReposErrorCode.none);
-    yield currentState;
     try {
       await _repoServerApiService.deleteRepo(repoId);
-      final updatedResults = [...currentState.results];
-      final updatedCurrentResults = [...currentState.currentResults];
+      final updatedResults = [...state.results];
+      final updatedCurrentResults = [...state.currentResults];
       updatedResults.removeWhere((savedRepo) => savedRepo.id == repoId);
       updatedCurrentResults.removeWhere((savedRepo) => savedRepo.id == repoId);
-      yield currentState.update(
+      yield state.update(
           stateType: updatedResults.length == 0
               ? SavedReposStateType.no_saved_repos
               : SavedReposStateType.display_saved_repos,
           results: updatedResults,
           currentResults: updatedCurrentResults);
     } catch (e) {
-      yield currentState.update(
+      yield state.update(
           stateType: SavedReposStateType.display_saved_repos,
           errorMsg: e.toString(),
           errorCode: SavedReposErrorCode.delete_repo_error,
