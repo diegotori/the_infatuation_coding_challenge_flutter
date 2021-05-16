@@ -15,6 +15,8 @@ import 'package:the_infatuation_coding_challenge_flutter/widgets/search_repos_au
 
 bool get isInDebugMode {
   bool inDebugMode = false;
+  // Asserts only run for debug builds, therefore,
+  // this will only set in debug mode.
   assert(inDebugMode = true);
   return inDebugMode;
 }
