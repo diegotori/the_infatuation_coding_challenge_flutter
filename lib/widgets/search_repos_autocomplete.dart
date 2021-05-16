@@ -29,7 +29,6 @@ class _SearchReposAutoCompleteState extends State<SearchReposAutoComplete> {
               .search(pattern)
               .then((value) => value.items);
         },
-        hideOnLoading: true,
         hideOnError: true,
         itemBuilder: (context, suggestion) {
           return GithubRepoRow(
