@@ -46,8 +46,16 @@ class SavedReposState extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [stateType, errorMsg, errorCode, sortByStars, results, currentResults];
+  List<Object?> get props => [
+        stateType,
+        errorMsg,
+        errorCode,
+        sortByStars,
+        results,
+        currentResults,
+        repoToCreate,
+        repoId
+      ];
 
   @override
   String toString() {
