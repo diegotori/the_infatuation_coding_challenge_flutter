@@ -153,6 +153,7 @@ void main() {
               errorMsg: "Exception: $mock_exception_msg",
               errorCode: SavedReposErrorCode.delete_repo_error,
               results: [mockSavedRepo, mockSecondSavedRepo],
+              repoId: mock_repo_id,
               currentResults: [mockSavedRepo, mockSecondSavedRepo]),
         ],
         verify: (bloc) {
