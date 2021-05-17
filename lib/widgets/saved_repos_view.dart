@@ -28,8 +28,62 @@ class _SavedReposViewState extends State<SavedReposView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SavedReposBloc, SavedReposState>(
-        builder: (context, state) {
+    return BlocConsumer<SavedReposBloc, SavedReposState>(
+        listener: (context, state) {
+      final savedReposBloc = context.read<SavedReposBloc>();
+      switch (state.errorCode) {
+        case SavedReposErrorCode.create_repo_error:
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(
+                content:
+                    Text("There was a problem creating the selected Repo."),
+                action: SnackBarAction(
+                  label: "Retry",
+                  onPressed: () {
+                    savedReposBloc
+                        .add(SavedReposEvent.createRepo(state.repoToCreate!));
+                  },
+                ),
+              ))
+              .closed
+              .then((reason) {
+            if (reason == SnackBarClosedReason.timeout) {
+              savedReposBloc.add(SavedReposEvent.clearErrorCode());
+            }
+          });
+          break;
+        case SavedReposErrorCode.delete_repo_error:
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(
+                content:
+                    Text("There was a problem deleting the selected Repo."),
+                action: SnackBarAction(
+                  label: "Retry",
+                  onPressed: () {
+                    savedReposBloc
+                        .add(SavedReposEvent.deleteRepo(state.repoId!));
+                  },
+                ),
+              ))
+              .closed
+              .then((reason) {
+            if (reason == SnackBarClosedReason.timeout) {
+              savedReposBloc.add(SavedReposEvent.clearErrorCode());
+            }
+          });
+          break;
+        default:
+          break;
+      }
+    }, listenWhen: (prev, current) {
+      final failedToCreateRepo =
+          prev.stateType == SavedReposStateType.loading &&
+              current.errorCode == SavedReposErrorCode.create_repo_error;
+      final failedToDeleteRepo =
+          prev.stateType == SavedReposStateType.loading &&
+              current.errorCode == SavedReposErrorCode.delete_repo_error;
+      return failedToCreateRepo || failedToDeleteRepo;
+    }, builder: (context, state) {
       final savedReposBloc = context.read<SavedReposBloc>();
       final SavedReposStateType stateType = state.stateType;
       final List<SavedRepo> savedRepos = state.currentResults;
