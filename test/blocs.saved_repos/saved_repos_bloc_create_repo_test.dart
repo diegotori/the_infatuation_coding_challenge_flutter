@@ -8,7 +8,7 @@ import 'package:the_infatuation_coding_challenge_flutter/blocs/saved_repos/saved
 import '../mocks.dart';
 
 void main() {
-  group("SavedReposBloc fetch saved repos tests.", () {
+  group("SavedReposBloc create saved repos tests.", () {
     const mock_existing_repo_id = 87654321;
     const mock_existing_repo_full_name = "flutter/flutter";
     const mock_existing_repo_stargazers_count = 24;
