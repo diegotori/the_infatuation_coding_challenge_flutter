@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.theinfautation.challenge.coding.the_infatuation_coding_challenge_flutter">
+    package="com.theinfautation.challenge.coding.flutter">
    <application
        android:networkSecurityConfig="@xml/network_security_config"
-       android:label="the_infatuation_coding_challenge_flutter"
+       android:label="The Infatuation Coding Challenge"
        android:icon="@mipmap/ic_launcher"
        tools:targetApi="n">
         <activity
