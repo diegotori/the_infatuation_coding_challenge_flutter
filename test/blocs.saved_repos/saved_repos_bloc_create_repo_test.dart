@@ -187,6 +187,7 @@ void main() {
                     stateType: SavedReposStateType.display_saved_repos,
                     errorMsg: "Exception: $mock_exception_msg",
                     errorCode: SavedReposErrorCode.create_repo_error,
+                    repoToCreate: mockGithubRepo,
                     results: [mockExistingRepo],
                     currentResults: [mockExistingRepo])
               ],

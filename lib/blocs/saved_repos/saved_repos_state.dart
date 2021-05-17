@@ -9,7 +9,7 @@ class SavedReposState extends Equatable {
       this.sortByStars = false,
       this.results = const [],
       this.currentResults = const [],
-      SavedRepo? repoToCreate,
+      GithubRepo? repoToCreate,
       String? repoId})
       : this.repoToCreate = repoToCreate,
         this.repoId = repoId;
@@ -19,7 +19,7 @@ class SavedReposState extends Equatable {
   final bool sortByStars;
   final List<SavedRepo> results;
   final List<SavedRepo> currentResults;
-  final SavedRepo? repoToCreate;
+  final GithubRepo? repoToCreate;
   final String? repoId;
 
   factory SavedReposState.initial() =>
@@ -32,7 +32,7 @@ class SavedReposState extends Equatable {
       bool? sortByStars,
       List<SavedRepo>? results,
       List<SavedRepo>? currentResults,
-      SavedRepo? repoToCreate,
+      GithubRepo? repoToCreate,
       String? repoId}) {
     return SavedReposState(
         stateType: stateType ?? this.stateType,

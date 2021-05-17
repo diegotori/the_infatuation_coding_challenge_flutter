@@ -49,7 +49,7 @@ class SavedReposBloc extends Bloc<SavedReposEvent, SavedReposState> {
         yield* _deleteRepo(repoId);
         break;
       case SavedReposEventType.clear_error_code:
-        yield state.update(errorCode: SavedReposErrorCode.none);
+        yield state.update(errorCode: SavedReposErrorCode.none, errorMsg: "");
         break;
       case SavedReposEventType.toggle_sort_by_stars:
         final updatedValue = !state.sortByStars;
@@ -164,7 +164,7 @@ class SavedReposBloc extends Bloc<SavedReposEvent, SavedReposState> {
           stateType: SavedReposStateType.display_saved_repos,
           errorMsg: e.toString(),
           errorCode: SavedReposErrorCode.create_repo_error,
-          repoToCreate: savedRepo);
+          repoToCreate: repo);
     }
   }
 
