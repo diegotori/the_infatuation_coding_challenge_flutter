@@ -1,16 +1,33 @@
-# the_infatuation_coding_challenge_flutter
+# The Infatuation Coding Challenge (Flutter Edition)
 
-A new Flutter project.
+Enables one to search GitHub Repositories and add them to a list of favorites sent through a Docker based endpoint.
 
-## Getting Started
+Use the Search Bar on the top to search for GitHub Repositories and select one from the resulting Suggestions List in order to add it to your favorites.
+The Favorited Repos should appear below the Search Bar.
 
-This project is a starting point for a Flutter application.
+Swipe left and tap `Delete` to remove the favorited repo. You can also `Pull-to-Refresh` the Favorites List in order to refresh the current data.
 
-A few resources to get you started if this is your first Flutter project:
+Finally, toggle the PlatformSwitch to the right of the Search Bar in order to sort favorited repos by stargazer count.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Installation
+
+* Install the [Flutter SDK](https://flutter.dev/docs/get-started/install) for your specific platform.
+* Optionally install either [Android Studio](https://developer.android.com/studio/) or 
+  [Visual Studio Code](https://code.visualstudio.com/).
+* In the project's root directory, run the app by typing:
+  
+  ```bash
+  flutter run -t lib/main.dart
+  ```
+  You may get prompted to select a device to run the app with.
+  
+  Or from within Android Studio/Visual Studio Code, Create a Run Configuration that runs `lib/main.dart`.
+  
+  In Android Studio, select the device you want run the app on from the dropdown to the left of the Run Configuration dropdown.
+  
+* Run tests by typing:
+
+  ```bash
+  flutter test
+  ```
