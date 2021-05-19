@@ -15,10 +15,15 @@ Finally, toggle the PlatformSwitch to the right of the Search Bar in order to so
 * Install the [Flutter SDK](https://flutter.dev/docs/get-started/install) for your specific platform.
 * Optionally install either [Android Studio](https://developer.android.com/studio/) or 
   [Visual Studio Code](https://code.visualstudio.com/).
+* Run the Docker container by typing:
+
+  ```bash
+  $ docker run -p 8080:8080 gcr.io/hiring-278615/reposerver:v1.1
+  ```
 * In the project's root directory, run the app by typing:
   
   ```bash
-  flutter run -t lib/main.dart
+  $ flutter run -t lib/main.dart
   ```
   You may get prompted to select a device to run the app with.
   
@@ -29,5 +34,5 @@ Finally, toggle the PlatformSwitch to the right of the Search Bar in order to so
 * Run tests by typing:
 
   ```bash
-  flutter test
+  $ flutter test
   ```
