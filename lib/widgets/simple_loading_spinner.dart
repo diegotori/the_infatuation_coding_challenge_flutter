@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+///
+/// Simple [CircularProgressIndicator] to indicate loading.
+///
 class SimpleLoadingSpinner extends StatelessWidget {
   final bool visible;
 

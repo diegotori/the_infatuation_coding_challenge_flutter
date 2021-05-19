@@ -6,6 +6,10 @@ import 'package:the_infatuation_coding_challenge_flutter/api_service/github/gith
 import 'package:the_infatuation_coding_challenge_flutter/blocs/saved_repos/saved_repos_bloc.dart';
 import 'package:the_infatuation_coding_challenge_flutter/widgets/github_repo_row.dart';
 
+///
+/// Auto-complete Text Field that returns suggested GitHub repositories
+/// from [GithubClient] based on the current text input.
+///
 class SearchReposAutoComplete extends StatefulWidget {
   const SearchReposAutoComplete({Key? key}) : super(key: key);
 

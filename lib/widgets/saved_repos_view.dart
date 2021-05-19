@@ -9,6 +9,9 @@ import 'package:the_infatuation_coding_challenge_flutter/blocs/saved_repos/saved
 import 'package:the_infatuation_coding_challenge_flutter/widgets/github_repo_row.dart';
 import 'package:the_infatuation_coding_challenge_flutter/widgets/simple_loading_spinner.dart';
 
+///
+/// Widget representing our Saved Repository.
+///
 class SavedReposView extends StatefulWidget {
   const SavedReposView({Key? key}) : super(key: key);
 

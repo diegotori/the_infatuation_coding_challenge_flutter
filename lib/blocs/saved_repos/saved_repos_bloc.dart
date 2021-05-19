@@ -11,6 +11,15 @@ import 'package:the_infatuation_coding_challenge_flutter/api_service/saved_repo.
 part 'saved_repos_event.dart';
 part 'saved_repos_state.dart';
 
+///
+/// Represents a BLoC (Business Logic Component) that maintains the state
+/// of saved repositories from the backend based on the incoming events
+/// sent to it.
+///
+/// Supports fetching saved repos (either forcefully or by pulling to refresh),
+/// creating them, deleting them, and toggling whether they will be sorted
+/// by stargazer count.
+///
 class SavedReposBloc extends Bloc<SavedReposEvent, SavedReposState> {
   SavedReposBloc(this._repoServerApiService) : super(SavedReposState.initial());
   final RepoServerApiService _repoServerApiService;
@@ -94,11 +103,14 @@ class SavedReposBloc extends Bloc<SavedReposEvent, SavedReposState> {
         state.stateType == SavedReposStateType.display_saved_repos;
     SavedReposStateType? previousStateType;
     if (pullToRefresh && wasDisplayingSavedRepos) {
+      // Stash the previous state type so that we can use it
+      // when we finish updating our list of saved repos.
       previousStateType = state.stateType;
       stateToYield = state.update(
           stateType: SavedReposStateType.pull_to_refresh,
           errorCode: SavedReposErrorCode.none);
     } else {
+      // Otherwise, treat this as a loading event.
       stateToYield = state.update(
           stateType: SavedReposStateType.loading,
           errorCode: SavedReposErrorCode.none,

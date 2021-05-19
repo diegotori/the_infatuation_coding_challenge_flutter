@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+///
+/// Widget representing our GitHub Repository.
+///
 class GithubRepoRow extends StatelessWidget {
   const GithubRepoRow({
     Key? key,

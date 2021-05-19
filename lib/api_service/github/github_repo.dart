@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
 
+///
+/// Represents a GitHub repository.
+///
 class GithubRepo extends Equatable {
   const GithubRepo(
       {required this.id,
@@ -10,14 +13,44 @@ class GithubRepo extends Equatable {
       required this.url,
       required this.createdAt});
 
+  ///
+  /// This repository's identifier.
+  ///
   final int id;
+
+  ///
+  /// This repository's Full Name.
+  ///
   final String fullName;
+
+  ///
+  /// This repository's Description.
+  ///
   final String desc;
+
+  ///
+  /// This repository's Stargazer Count.
+  ///
   final int stargazersCount;
+
+  ///
+  /// This repository's Programming Language.
+  ///
   final String language;
+
+  ///
+  /// This repository's URL.
+  ///
   final String url;
+
+  ///
+  /// This repository's Creation Date as an ISO-8601 timestamp value.
+  ///
   final String createdAt;
 
+  ///
+  /// Creates a new instance from a raw parsed JSON [Map].
+  ///
   static GithubRepo fromJson(dynamic json) {
     return GithubRepo(
         id: json['id'] as int,
@@ -42,5 +75,6 @@ class GithubRepo extends Equatable {
 }
 
 extension GithubRepoExtension on GithubRepo {
+  /// Returns [createdAt] as a [DateTime].
   DateTime get createdAtDate => DateTime.parse(createdAt);
 }
