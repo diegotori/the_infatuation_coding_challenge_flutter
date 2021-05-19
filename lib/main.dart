@@ -102,6 +102,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.primaryColor;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -118,13 +120,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   width: 8,
                 ),
                 BlocBuilder<SavedReposBloc, SavedReposState>(
-                  builder: (context, state) => PlatformSwitch(
-                      value: state.sortByStars,
-                      onChanged: (_) {
-                        context
-                            .read<SavedReposBloc>()
-                            .add(SavedReposEvent.toggleSortByStars());
-                      }),
+                  builder: (context, state) => Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        state.sortByStars ? Icons.star : Icons.star_border,
+                        color: primaryColor,
+                      ),
+                      PlatformSwitch(
+                          value: state.sortByStars,
+                          onChanged: (_) {
+                            context
+                                .read<SavedReposBloc>()
+                                .add(SavedReposEvent.toggleSortByStars());
+                          }),
+                    ],
+                  ),
                 )
               ],
             ),
